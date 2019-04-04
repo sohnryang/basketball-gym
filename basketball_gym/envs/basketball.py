@@ -99,12 +99,14 @@ class BasketballEnv(gym.Env):
                 (140, 30),
                 (110, 30),
             ])
+            upper_goal.set_color(0.5, 0.5, 0.5)
             lower_goal = rendering.FilledPolygon([
                 (110, 400),
                 (140, 400),
                 (140, 370),
                 (110, 370),
             ])
+            lower_goal.set_color(0.5, 0.5, 0.5)
             self.viewer.add_geom(upper_goal)
             self.viewer.add_geom(lower_goal)
             player = rendering.FilledPolygon(self.rect_coords(self.player_pos))
