@@ -69,8 +69,7 @@ class BasketballEnv(gym.Env):
 
     def __init__(self):
         self.viewer = None
-        self.player_pos = (125, 80)
-        self.enemy_pos = (125, 320)
+        self.state = None
         self.PLAYER_SIZE = 16
 
     def rect_coords(self, pos):
@@ -81,11 +80,17 @@ class BasketballEnv(gym.Env):
             (pos[0] - self.PLAYER_SIZE / 2, pos[1] + self.PLAYER_SIZE / 2),
         ]
 
+    def player_coords(self):
+        return self.rect_coords((self.state[1], self.state[2]))
+
+    def opponent_coords(self):
+        return self.rect_coords((self.state[3], self.state[4]))
+
     def step(self, action):
         pass
 
     def reset(self):
-        pass
+        self.state = np.array([0, 125, 80, 125, 320, 0])
 
     def render(self, mode='human'):
         screen_width = 250
@@ -109,16 +114,19 @@ class BasketballEnv(gym.Env):
             lower_goal.set_color(0.5, 0.5, 0.5)
             self.viewer.add_geom(upper_goal)
             self.viewer.add_geom(lower_goal)
-            player = rendering.FilledPolygon(self.rect_coords(self.player_pos))
+            player = rendering.FilledPolygon(self.player_coords())
             self.player_trans = rendering.Transform()
             player.add_attr(self.player_trans)
             player.set_color(0, 0.5, 0)
             self.viewer.add_geom(player)
-            enemy = rendering.FilledPolygon(self.rect_coords(self.enemy_pos))
-            self.enemy_trans = rendering.Transform()
-            enemy.add_attr(self.enemy_trans)
-            enemy.set_color(1, 0, 0)
-            self.viewer.add_geom(enemy)
+            opponent = rendering.FilledPolygon(self.opponent_coords())
+            self.opponent_trans = rendering.Transform()
+            opponent.add_attr(self.opponent_trans)
+            opponent.set_color(1, 0, 0)
+            self.viewer.add_geom(opponent)
+            half_line = rendering.Line(start=(0, 200), end=(250, 200))
+            half_line.set_color(0, 0, 0)
+            self.viewer.add_geom(half_line)
         return self.viewer.render(return_rgb_array=mode=='rgb_array')
 
     def close(self):
