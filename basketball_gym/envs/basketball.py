@@ -6,8 +6,62 @@ from gym.utils import seeding
 
 class BasketballEnv(gym.Env):
     """
-    A basketball simulation.
+    This class implements single play mode of basketball gym.
+
+    Observations
+    ------------
+    Type: Box(6)
+
+    === ================
+    Num Observation
+    --- ----------------
+    0   Ball position
+    1   Player X coord
+    2   Player Y coord
+    3   Opponent X coord
+    4   Opponent Y coord
+    5   Penalty
+    === ================
+
+    Actions
+    -------
+    Type: Discrete(5)
+
+    === ====================
+    Num Action
+    --- --------------------
+    0   Move player forward
+    1   Move player backward
+    2   Move player left
+    3   Move player right
+    4   Shoot the ball
+    === ====================
+
+    Reward
+    ------
+    Reward is 10 when the player scores, and -10 if the opponent scores.
+    Also, player gets 1 when it gets the ball, and -1 if it loses it.
+
+    Starting State
+    --------------
+    === =====
+    Num Value
+    --- -----
+    0       0
+    1     125
+    2      80
+    3     125
+    4     320
+    5       0
+    === =====
+
+    Episode Termination
+    -------------------
+    Penalty is bigger than 1000
+    If opponent scores, penalty increases by 10.
+    If opponent steals the ball, penalty increases by 1.
     """
+
     metadata = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second': 50,
